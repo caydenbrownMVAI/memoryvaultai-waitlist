@@ -2,325 +2,657 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MemoryVaultAI — Never Lose a Saved Video Again</title>
-  <meta name="description" content="AI-powered search for your saved videos. Just describe what you remember. Join the waitlist.">
-  <meta property="og:title" content="MemoryVaultAI — Never Lose a Saved Video Again">
-  <meta property="og:description" content="AI-powered search for your saved TikToks, Reels, and YouTube videos. Describe what you remember, find it instantly.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MemoryVaultAI — Find Any Saved Video Instantly</title>
+  <meta name="description" content="The first AI-powered search engine for your saved social media content. Describe what you remember. Find it instantly.">
+  <meta property="og:title" content="MemoryVaultAI — Find Any Saved Video Instantly">
+  <meta property="og:description" content="Stop scrolling through thousands of saved videos. Just describe what you remember.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://join.memoryvaultai.app">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="/logo.png" type="image/png">
-  <link rel="apple-touch-icon" href="/logo.png">
+  <meta property="og:url" content="https://memoryvaultai.app">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
-      background: #000;
-      color: #f5f5f7;
-      min-height: 100dvh;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    :root {
+      --cyan: #1DB8D4;
+      --cyan-glow: rgba(29, 184, 212, 0.15);
+      --cyan-glow-strong: rgba(29, 184, 212, 0.25);
+      --bg: #000000;
+      --surface: #0a0a0a;
+      --surface-border: #1a1a1a;
+      --text-primary: #f5f5f7;
+      --text-secondary: #86868b;
+      --text-muted: #48484a;
+      --input-bg: #111111;
+      --input-border: #222222;
+      --input-focus: #333333;
+      --radius: 14px;
+      --font: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    .page {
+    html { background: var(--bg); }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-primary);
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 80px 24px;
+      padding: 40px 24px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
 
     /* ── Logo ── */
     .logo {
-      width: 96px;
-      height: 96px;
-      border-radius: 22px;
-      margin-bottom: 64px;
+      width: 72px;
+      height: 72px;
+      margin-bottom: 48px;
       opacity: 0;
-      animation: rise 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0s forwards;
+      animation: fadeUp 0.6s ease forwards;
     }
 
     /* ── Headline ── */
-    h1 {
-      font-size: clamp(2.5rem, 8vw, 3.5rem);
-      font-weight: 700;
-      text-align: center;
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-      max-width: 560px;
+    .headline {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
       opacity: 0;
-      animation: rise 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.08s forwards;
+      animation: fadeUp 0.6s ease 0.1s forwards;
     }
 
-    /* ── Subheadline ── */
-    .sub {
-      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    .headline .accent {
+      color: var(--cyan);
+    }
+
+    .subline {
+      font-size: 15px;
       font-weight: 400;
-      color: #86868b;
-      text-align: center;
+      color: var(--text-secondary);
       line-height: 1.5;
-      max-width: 400px;
-      margin-top: 20px;
+      margin-bottom: 48px;
+      max-width: 340px;
       opacity: 0;
-      animation: rise 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.16s forwards;
+      animation: fadeUp 0.6s ease 0.2s forwards;
     }
 
     /* ── Form ── */
-    .form-area {
-      margin-top: 56px;
+    .form-wrap {
       width: 100%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
       opacity: 0;
-      animation: rise 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.24s forwards;
+      animation: fadeUp 0.6s ease 0.3s forwards;
     }
 
-    input[type="email"] {
+    .email-input {
       width: 100%;
-      height: 56px;
-      padding: 0 20px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 400;
-      color: #f5f5f7;
-      background: #1d1d1f;
-      border: 1px solid #424245;
-      border-radius: 14px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    input[type="email"]::placeholder {
-      color: #6e6e73;
-    }
-
-    input[type="email"]:focus {
-      border-color: #1DB8D4;
-    }
-
-    .cta {
-      width: 100%;
-      height: 56px;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      color: #000;
-      background: #1DB8D4;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .cta:hover { opacity: 0.85; }
-    .cta:active { opacity: 0.7; }
-    .cta:disabled { opacity: 0.35; cursor: default; }
-
-    /* ── Feedback ── */
-    .feedback {
-      min-height: 24px;
-      text-align: center;
-      font-size: 0.875rem;
+      padding: 16px 20px;
+      font-family: var(--font);
+      font-size: 15px;
       font-weight: 500;
-      margin-top: 4px;
+      color: var(--text-primary);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      margin-bottom: 12px;
     }
 
-    .feedback:empty { visibility: hidden; }
-    .fb-error { color: #ff453a; }
-    .fb-dupe { color: #1DB8D4; }
+    .email-input::placeholder {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
 
-    /* ── Success ── */
+    .email-input:focus {
+      border-color: var(--input-focus);
+      background: #0f0f0f;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px 20px;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 700;
+      color: #000;
+      background: var(--cyan);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+      letter-spacing: 0.2px;
+    }
+
+    .btn:hover { opacity: 0.9; }
+    .btn:active { transform: scale(0.985); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* ── Messages ── */
+    .msg {
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 12px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.3s ease, max-height 0.3s ease;
+    }
+
+    .msg.show {
+      opacity: 1;
+      max-height: 40px;
+    }
+
+    .msg.error { color: #ff453a; }
+    .msg.dupe { color: var(--text-secondary); }
+
+    /* ── Success state ── */
     .success {
       display: none;
+      width: 100%;
       text-align: center;
-      margin-top: 56px;
-      max-width: 380px;
     }
 
-    .success.active {
+    .success.show {
       display: block;
-      animation: rise 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      animation: fadeUp 0.5s ease forwards;
     }
 
-    .success h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 10px;
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--cyan-glow);
+      border: 2px solid var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 24px;
+      color: var(--cyan);
     }
 
-    .success p {
-      font-size: 1rem;
-      color: #86868b;
+    .success h3 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .success .sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 36px;
       line-height: 1.5;
     }
 
-    /* ── Counter ── */
-    .counter {
-      margin-top: 24px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #86868b;
+    /* ── Referral card ── */
+    .referral-card {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
       text-align: center;
-      opacity: 0;
-      transition: opacity 0.5s;
     }
 
-    .counter.visible { opacity: 1; }
-    .counter strong { color: #f5f5f7; }
+    .referral-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+    }
+
+    .referral-card .reward {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 24px;
+    }
+
+    .referral-link-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .referral-link-input {
+      flex: 1;
+      padding: 12px 14px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      outline: none;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .copy-btn {
+      padding: 12px 18px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 700;
+      color: #000;
+      background: var(--cyan);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover { opacity: 0.9; }
+
+    .copy-btn.copied {
+      background: #2ecc71;
+    }
+
+    /* ── Progress tracker ── */
+    .progress-section {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--surface-border);
+    }
+
+    .progress-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: var(--input-bg);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--cyan);
+      border-radius: 4px;
+      transition: width 0.6s ease;
+      min-width: 0;
+    }
+
+    .progress-count {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .progress-count .of {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .progress-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .reward-unlocked {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: var(--cyan-glow);
+      border: 1px solid rgba(29, 184, 212, 0.3);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+
+    .reward-unlocked.show { display: block; }
+
+    /* ── Social proof counter ── */
+    .counter {
+      margin-top: 32px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .counter.show { opacity: 1; }
 
     /* ── Footer ── */
-    footer {
+    .footer {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      background: linear-gradient(transparent, #000 60%);
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
     }
 
-    footer a {
-      font-size: 0.75rem;
-      font-weight: 400;
-      color: #6e6e73;
+    .footer a {
+      color: var(--text-muted);
       text-decoration: none;
-      transition: color 0.2s;
+      transition: color 0.2s ease;
     }
 
-    footer a:hover { color: #f5f5f7; }
+    .footer a:hover { color: var(--text-secondary); }
+    .footer .sep { color: var(--text-muted); margin: 0 8px; }
 
-    /* ── Mobile ── */
-    @media (max-width: 480px) {
-      .page { padding: 60px 20px 100px; }
-      .logo { width: 80px; height: 80px; border-radius: 20px; margin-bottom: 48px; }
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(20px); }
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      body { padding: 32px 20px 80px; }
+      .headline { font-size: 24px; }
+      .subline { font-size: 14px; margin-bottom: 40px; }
+      .logo { width: 60px; height: 60px; margin-bottom: 40px; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="container">
 
-    <img src="/logo.png" alt="MemoryVaultAI" class="logo">
+    <!-- Logo -->
+    <img src="logo.png" alt="MemoryVaultAI" class="logo">
 
-    <h1>Never lose a saved video again.</h1>
+    <!-- Headline -->
+    <h1 class="headline">Find any saved video.<br><span class="accent">Instantly.</span></h1>
+    <p class="subline">The first AI search engine for your saved social media. Just describe what you remember.</p>
 
-    <p class="sub">AI-powered search for your saved videos. Just describe what you remember.</p>
-
-    <div class="form-area" id="formArea">
-      <input type="email" id="email" placeholder="Email" autocomplete="email">
-      <button class="cta" id="cta" onclick="submitEmail()">Join the Waitlist</button>
-      <div class="feedback" id="feedback"></div>
+    <!-- Email form -->
+    <div class="form-wrap" id="formWrap">
+      <input type="email" class="email-input" id="emailInput" placeholder="Email" autocomplete="email" required>
+      <button class="btn" id="submitBtn" onclick="handleSubmit()">Join the Waitlist</button>
+      <div class="msg error" id="errorMsg"></div>
+      <div class="msg dupe" id="dupeMsg"></div>
     </div>
 
-    <div class="success" id="success">
-      <h2>You're on the list.</h2>
-      <p>We'll let you know when MemoryVaultAI is ready.</p>
+    <!-- Success + Referral (hidden until submit) -->
+    <div class="success" id="successSection">
+      <div class="success-icon">✓</div>
+      <h3>You're on the list</h3>
+      <p class="sub">We'll notify you when MemoryVaultAI launches.</p>
+
+      <!-- Referral card -->
+      <div class="referral-card">
+        <h4>Share &amp; Earn</h4>
+        <p class="reward">Refer 3 friends → free Pro month</p>
+
+        <div class="referral-link-row">
+          <input type="text" class="referral-link-input" id="referralLinkInput" readonly>
+          <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+          </div>
+          <div class="progress-count"><span id="refCount">0</span> <span class="of">/ 3</span></div>
+          <div class="progress-hint">friends referred</div>
+          <div class="reward-unlocked" id="rewardBadge">🎉 Pro month unlocked — applied at launch</div>
+        </div>
+      </div>
     </div>
 
+    <!-- Social proof -->
     <div class="counter" id="counter"></div>
 
   </div>
 
-  <footer>
+  <!-- Footer -->
+  <div class="footer">
     <a href="/privacy">Privacy</a>
+    <span class="sep">·</span>
     <a href="/terms">Terms</a>
-    <a href="https://instagram.com/memoryvaultai.app" target="_blank" rel="noopener">Instagram</a>
-  </footer>
+    <span class="sep">·</span>
+    <a href="https://instagram.com/memoryvaultai" target="_blank" rel="noopener">@memoryvaultai</a>
+  </div>
 
   <script>
+    // ═══════════════════════════════════════════════════
+    // CONFIG
+    // ═══════════════════════════════════════════════════
     const SB = 'https://qwiyntxzbfyhwkvjkeun.supabase.co';
     const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aXludHh6YmZ5aHdrdmprZXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExOTAzMTQsImV4cCI6MjA4Njc2NjMxNH0.igvD66azZWnU2AaWTlQ0_VOt_w73bVHQWj2RCrYdrDY';
+    const HEADERS = {
+      'apikey': KEY,
+      'Authorization': `Bearer ${KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    };
 
-    function src() {
-      const p = new URLSearchParams(location.search);
-      return p.get('ref') || p.get('utm_source') || 'direct';
+    // ═══════════════════════════════════════════════════
+    // Read URL params
+    // ═══════════════════════════════════════════════════
+    function getRefCode() {
+      return new URLSearchParams(location.search).get('ref') || null;
     }
 
-    async function submitEmail() {
-      const input = document.getElementById('email');
-      const btn = document.getElementById('cta');
-      const fb = document.getElementById('feedback');
+    function getSource() {
+      const p = new URLSearchParams(location.search);
+      return p.get('utm_source') || (getRefCode() ? 'referral' : 'direct');
+    }
+
+    // ═══════════════════════════════════════════════════
+    // Submit handler
+    // ═══════════════════════════════════════════════════
+    async function handleSubmit() {
+      const input = document.getElementById('emailInput');
+      const btn = document.getElementById('submitBtn');
+      const errorMsg = document.getElementById('errorMsg');
+      const dupeMsg = document.getElementById('dupeMsg');
       const email = input.value.trim().toLowerCase();
 
-      fb.textContent = '';
-      fb.className = 'feedback';
+      // Reset messages
+      errorMsg.classList.remove('show');
+      dupeMsg.classList.remove('show');
 
+      // Validate
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        fb.textContent = 'Enter a valid email address.';
-        fb.classList.add('fb-error');
-        input.focus();
+        errorMsg.textContent = 'Please enter a valid email address.';
+        errorMsg.classList.add('show');
         return;
       }
 
+      // Disable button
       btn.disabled = true;
       btn.textContent = 'Joining...';
 
       try {
+        const refCode = getRefCode();
+
+        // Build insert payload
+        const payload = {
+          email: email,
+          source: getSource()
+        };
+
+        // If there's a ref param, set referred_by
+        if (refCode) {
+          payload.referred_by = refCode;
+        }
+
         const res = await fetch(`${SB}/rest/v1/waitlist`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': KEY,
-            'Authorization': `Bearer ${KEY}`,
-            'Prefer': 'return=minimal'
-          },
-          body: JSON.stringify({ email, source: src() })
+          headers: HEADERS,
+          body: JSON.stringify(payload)
         });
 
-        if (res.ok || res.status === 201) {
-          document.getElementById('formArea').style.display = 'none';
-          document.getElementById('success').classList.add('active');
-          loadCount();
+        if (res.ok) {
+          const data = await res.json();
+          const newUser = data[0];
+          showSuccess(newUser.referral_code);
+        } else if (res.status === 409 || res.status === 23505) {
+          // Duplicate email — look up their existing referral code
+          dupeMsg.textContent = "You're already on the list!";
+          dupeMsg.classList.add('show');
+          await showExistingUser(email);
         } else {
-          const data = await res.json().catch(() => null);
-          if (res.status === 409 || data?.code === '23505' || data?.message?.includes('duplicate') || data?.message?.includes('unique')) {
-            fb.textContent = "You're already on the list.";
-            fb.classList.add('fb-dupe');
+          const errBody = await res.json().catch(() => null);
+          // Check for unique violation in error body
+          if (errBody && errBody.code === '23505') {
+            dupeMsg.textContent = "You're already on the list!";
+            dupeMsg.classList.add('show');
+            await showExistingUser(email);
           } else {
-            throw new Error();
+            errorMsg.textContent = 'Something went wrong. Try again.';
+            errorMsg.classList.add('show');
+            btn.disabled = false;
+            btn.textContent = 'Join the Waitlist';
           }
         }
-      } catch (e) {
-        fb.textContent = 'Something went wrong. Try again.';
-        fb.classList.add('fb-error');
-      } finally {
+      } catch (err) {
+        console.error(err);
+        errorMsg.textContent = 'Connection error. Try again.';
+        errorMsg.classList.add('show');
         btn.disabled = false;
         btn.textContent = 'Join the Waitlist';
       }
     }
 
-    document.getElementById('email').addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); submitEmail(); }
-    });
+    // ═══════════════════════════════════════════════════
+    // Handle existing user (duplicate email)
+    // ═══════════════════════════════════════════════════
+    async function showExistingUser(email) {
+      try {
+        const res = await fetch(`${SB}/rest/v1/rpc/get_referral_stats`, {
+          method: 'POST',
+          headers: HEADERS,
+          body: JSON.stringify({ lookup_email: email })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.length > 0) {
+            showSuccess(data[0].referral_code, data[0].referral_count);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch existing user:', err);
+      }
+    }
 
+    // ═══════════════════════════════════════════════════
+    // Show success + referral screen
+    // ═══════════════════════════════════════════════════
+    function showSuccess(referralCode, existingCount) {
+      const formWrap = document.getElementById('formWrap');
+      const successSection = document.getElementById('successSection');
+      const referralLinkInput = document.getElementById('referralLinkInput');
+      const refCountEl = document.getElementById('refCount');
+      const progressBar = document.getElementById('progressBar');
+      const rewardBadge = document.getElementById('rewardBadge');
+
+      // Hide form
+      formWrap.style.display = 'none';
+
+      // Set referral link
+      const link = `https://memoryvaultai.app?ref=${referralCode}`;
+      referralLinkInput.value = link;
+
+      // Set count
+      const count = existingCount || 0;
+      refCountEl.textContent = count;
+      progressBar.style.width = `${Math.min((count / 3) * 100, 100)}%`;
+
+      // Show reward badge if earned
+      if (count >= 3) {
+        rewardBadge.classList.add('show');
+      }
+
+      // Show success
+      successSection.classList.add('show');
+
+      // Load waitlist count for social proof
+      loadCount();
+    }
+
+    // ═══════════════════════════════════════════════════
+    // Copy referral link
+    // ═══════════════════════════════════════════════════
+    function copyLink() {
+      const input = document.getElementById('referralLinkInput');
+      const btn = document.getElementById('copyBtn');
+
+      navigator.clipboard.writeText(input.value).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(() => {
+        // Fallback for older browsers
+        input.select();
+        document.execCommand('copy');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════
+    // Social proof counter
+    // ═══════════════════════════════════════════════════
     async function loadCount() {
       try {
         const res = await fetch(`${SB}/rest/v1/rpc/waitlist_count`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': KEY, 'Authorization': `Bearer ${KEY}` }
+          headers: HEADERS
         });
-        const n = await res.json();
-        if (n >= 10) {
-          const el = document.getElementById('counter');
-          el.innerHTML = `<strong>${n.toLocaleString()}</strong> people on the waitlist`;
-          el.classList.add('visible');
+        if (res.ok) {
+          const count = await res.json();
+          if (count > 10) {
+            const el = document.getElementById('counter');
+            el.textContent = `${count.toLocaleString()} people on the waitlist`;
+            el.classList.add('show');
+          }
         }
-      } catch (e) {}
+      } catch (err) {
+        console.error('Count fetch failed:', err);
+      }
     }
 
+    // ═══════════════════════════════════════════════════
+    // Allow Enter key to submit
+    // ═══════════════════════════════════════════════════
+    document.getElementById('emailInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleSubmit();
+    });
+
+    // Load social proof on page load
     loadCount();
   </script>
 </body>
