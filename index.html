@@ -444,11 +444,16 @@
     // ═══════════════════════════════════════════════════
     const SB = 'https://qwiyntxzbfyhwkvjkeun.supabase.co';
     const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aXludHh6YmZ5aHdrdmprZXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExOTAzMTQsImV4cCI6MjA4Njc2NjMxNH0.igvD66azZWnU2AaWTlQ0_VOt_w73bVHQWj2RCrYdrDY';
-    const HEADERS = {
+    const INSERT_HEADERS = {
       'apikey': KEY,
       'Authorization': `Bearer ${KEY}`,
       'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
+      'Prefer': 'return=minimal'
+    };
+    const RPC_HEADERS = {
+      'apikey': KEY,
+      'Authorization': `Bearer ${KEY}`,
+      'Content-Type': 'application/json'
     };
 
     // ═══════════════════════════════════════════════════
@@ -504,22 +509,18 @@
 
         const res = await fetch(`${SB}/rest/v1/waitlist`, {
           method: 'POST',
-          headers: HEADERS,
+          headers: INSERT_HEADERS,
           body: JSON.stringify(payload)
         });
 
         if (res.ok) {
-          const data = await res.json();
-          const newUser = data[0];
-          showSuccess(newUser.referral_code);
-        } else if (res.status === 409 || res.status === 23505) {
-          // Duplicate email — look up their existing referral code
+          await showExistingUser(email);
+        } else if (res.status === 409) {
           dupeMsg.textContent = "You're already on the list!";
           dupeMsg.classList.add('show');
           await showExistingUser(email);
         } else {
           const errBody = await res.json().catch(() => null);
-          // Check for unique violation in error body
           if (errBody && errBody.code === '23505') {
             dupeMsg.textContent = "You're already on the list!";
             dupeMsg.classList.add('show');
@@ -547,7 +548,7 @@
       try {
         const res = await fetch(`${SB}/rest/v1/rpc/get_referral_stats`, {
           method: 'POST',
-          headers: HEADERS,
+          headers: RPC_HEADERS,
           body: JSON.stringify({ lookup_email: email })
         });
         if (res.ok) {
@@ -630,7 +631,7 @@
       try {
         const res = await fetch(`${SB}/rest/v1/rpc/waitlist_count`, {
           method: 'POST',
-          headers: HEADERS
+          headers: RPC_HEADERS
         });
         if (res.ok) {
           const count = await res.json();
