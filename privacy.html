@@ -4,30 +4,270 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy — MemoryVaultAI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,14..144,600;0,14..144,700;1,14..144,400;1,14..144,500&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Outfit', system-ui, sans-serif;
-      background: #0A0A0F;
-      color: #F0F0F5;
-      padding: 48px 24px;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
+
+    :root {
+      --ink: #07090c;
+      --ink-deep: #03050a;
+      --paper: #ECE4D1;
+      --paper-dim: #98917f;
+      --paper-mute: #55504a;
+      --paper-faint: #2a2824;
+      --cyan: #3CC9E3;
+      --cyan-soft: rgba(60, 201, 227, 0.12);
+      --hairline: rgba(236, 228, 209, 0.08);
+      --hairline-strong: rgba(236, 228, 209, 0.18);
+      --display: 'Fraunces', Georgia, serif;
+      --sans: 'Manrope', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
     }
-    .container { max-width: 640px; margin: 0 auto; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-    .date { color: #8A8A9A; font-size: 0.9rem; margin-bottom: 32px; }
-    h2 { font-size: 1.2rem; font-weight: 600; margin-top: 32px; margin-bottom: 12px; color: #1DB8D4; }
-    p { color: #C0C0CC; margin-bottom: 16px; font-size: 0.95rem; }
-    a { color: #1DB8D4; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .back { display: inline-block; margin-bottom: 24px; font-size: 0.9rem; }
+
+    html { background: var(--ink); }
+
+    body {
+      font-family: var(--sans);
+      background: var(--ink);
+      color: var(--paper);
+      padding: 72px 24px 88px;
+      line-height: 1.7;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100dvh;
+    }
+
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 50% 40% at 50% 0%, rgba(60, 201, 227, 0.08), transparent 70%),
+        linear-gradient(180deg, var(--ink-deep) 0%, var(--ink) 40%, var(--ink-deep) 100%);
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.055;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92  0 0 0 0 0.89  0 0 0 0 0.82  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 20px 28px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      border-bottom: 1px solid var(--hairline);
+      background: linear-gradient(180deg, var(--ink-deep) 0%, transparent 100%);
+    }
+
+    .topbar .pulse {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      margin-right: 8px;
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulse 2.4s ease-in-out infinite;
+      vertical-align: 1px;
+    }
+
+    .topbar .label-r { color: var(--paper-mute); }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 40px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      text-decoration: none;
+      transition: color 0.2s ease, gap 0.2s ease;
+    }
+
+    .back:hover { color: var(--cyan); gap: 12px; }
+
+    .doc-eyebrow {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(38px, 6vw, 52px);
+      font-weight: 600;
+      font-variation-settings: "opsz" 144, "SOFT" 30;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+      color: var(--paper);
+    }
+
+    .date {
+      font-family: var(--mono);
+      color: var(--paper-mute);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    h2 {
+      font-family: var(--display);
+      font-size: clamp(20px, 2.6vw, 24px);
+      font-weight: 500;
+      font-style: italic;
+      font-variation-settings: "opsz" 72;
+      letter-spacing: -0.01em;
+      margin-top: 44px;
+      margin-bottom: 14px;
+      color: var(--paper);
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+
+    h2::before {
+      content: "§";
+      font-family: var(--display);
+      font-style: normal;
+      font-size: 0.72em;
+      color: var(--cyan);
+      font-weight: 400;
+    }
+
+    p {
+      color: var(--paper-dim);
+      margin-bottom: 16px;
+      font-size: 15.5px;
+      font-weight: 400;
+      line-height: 1.7;
+      letter-spacing: 0.005em;
+    }
+
+    ul {
+      margin-bottom: 16px;
+      padding-left: 4px;
+      list-style: none;
+    }
+
+    ul li {
+      color: var(--paper-dim);
+      font-size: 15.5px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      padding-left: 22px;
+      position: relative;
+    }
+
+    ul li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--cyan);
+      font-size: 0.9em;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(60, 201, 227, 0.3);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    .footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      padding: 18px 28px 22px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      z-index: 5;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--hairline);
+      background: linear-gradient(0deg, var(--ink-deep) 0%, transparent 100%);
+    }
+
+    .footer a {
+      color: var(--paper-mute);
+      border: none;
+    }
+
+    .footer a:hover { color: var(--paper); }
+    .footer .sep { color: var(--paper-faint); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(0.82); }
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 72px 20px 76px; }
+      .topbar { padding: 16px 18px 14px; font-size: 9.5px; letter-spacing: 0.1em; }
+      .footer { padding: 14px 18px 18px; gap: 10px; font-size: 9.5px; letter-spacing: 0.1em; }
+      h1 { font-size: 36px; }
+      h2 { font-size: 20px; margin-top: 36px; }
+      .date { margin-bottom: 36px; padding-bottom: 22px; }
+      p, ul li { font-size: 15px; }
+    }
   </style>
 </head>
 <body>
+  <div class="atmosphere"></div>
+  <div class="grain"></div>
+
+  <div class="topbar">
+    <span class="label-l"><span class="pulse"></span>MVA · memory index</span>
+    <span class="label-r">doc · privacy</span>
+  </div>
+
   <div class="container">
     <a href="/" class="back">← Back to waitlist</a>
+    <div class="doc-eyebrow">[ 02 ] · legal</div>
     <h1>Privacy Policy</h1>
     <p class="date">Last updated: March 2026</p>
 
@@ -48,6 +288,14 @@
 
     <h2>Contact</h2>
     <p>Questions? Reach us at <a href="mailto:support@memoryvaultai.app">support@memoryvaultai.app</a>.</p>
+  </div>
+
+  <div class="footer">
+    <a href="/privacy">Privacy</a>
+    <span class="sep">·</span>
+    <a href="/terms">Terms</a>
+    <span class="sep">·</span>
+    <a href="https://instagram.com/memoryvaultai.app" target="_blank" rel="noopener">@memoryvaultai.app</a>
   </div>
 </body>
 </html>

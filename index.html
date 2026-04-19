@@ -11,156 +11,341 @@
   <meta property="og:url" content="https://memoryvaultai.app">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,14..144,400;0,14..144,600;0,14..144,700;1,14..144,400;1,14..144,500&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --cyan: #1DB8D4;
-      --cyan-glow: rgba(29, 184, 212, 0.15);
-      --cyan-glow-strong: rgba(29, 184, 212, 0.25);
-      --bg: #000000;
-      --surface: #0a0a0a;
-      --surface-border: #1a1a1a;
-      --text-primary: #f5f5f7;
-      --text-secondary: #86868b;
-      --text-muted: #48484a;
-      --input-bg: #111111;
-      --input-border: #222222;
-      --input-focus: #333333;
-      --radius: 14px;
-      --font: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+      --ink: #07090c;
+      --ink-deep: #03050a;
+      --paper: #ECE4D1;
+      --paper-dim: #98917f;
+      --paper-mute: #55504a;
+      --paper-faint: #2a2824;
+      --cyan: #3CC9E3;
+      --cyan-soft: rgba(60, 201, 227, 0.12);
+      --cyan-strong: rgba(60, 201, 227, 0.32);
+      --hairline: rgba(236, 228, 209, 0.08);
+      --hairline-strong: rgba(236, 228, 209, 0.18);
+      --error: #E86A55;
+      --radius: 4px;
+      --display: 'Fraunces', Georgia, serif;
+      --sans: 'Manrope', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
     }
 
-    html { background: var(--bg); }
+    html { background: var(--ink); }
 
     body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text-primary);
+      font-family: var(--sans);
+      background: var(--ink);
+      color: var(--paper);
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 24px;
+      padding: 96px 24px 88px;
+      position: relative;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
+    /* ── Atmosphere: radial glow + subtle gradients ── */
+    .atmosphere {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 30%, rgba(60, 201, 227, 0.10), transparent 70%),
+        radial-gradient(ellipse 80% 60% at 50% 120%, rgba(236, 202, 140, 0.04), transparent 60%),
+        linear-gradient(180deg, var(--ink-deep) 0%, var(--ink) 45%, var(--ink-deep) 100%);
+    }
+
+    /* ── Grain overlay ── */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.055;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.92  0 0 0 0 0.89  0 0 0 0 0.82  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    /* ── Top system bar ── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 28px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      border-bottom: 1px solid var(--hairline);
+      background: linear-gradient(180deg, var(--ink-deep) 0%, transparent 100%);
+      opacity: 0;
+      animation: fadeIn 0.8s ease 0.05s forwards;
+    }
+
+    .topbar .pulse {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      margin-right: 8px;
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulse 2.4s ease-in-out infinite;
+      vertical-align: 1px;
+    }
+
+    .topbar .label-r { color: var(--paper-mute); }
+    .topbar .label-r em { font-style: normal; color: var(--paper); }
+
+    /* ── Container ── */
     .container {
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
+      position: relative;
+      z-index: 2;
     }
 
     /* ── Logo ── */
-    .logo {
-      width: 72px;
-      height: 72px;
-      margin-bottom: 48px;
+    .logo-wrap {
+      position: relative;
+      margin-bottom: 44px;
       opacity: 0;
-      animation: fadeUp 0.6s ease forwards;
+      animation: fadeUp 0.7s cubic-bezier(.2,.7,.3,1) forwards;
     }
+
+    .logo-wrap::before,
+    .logo-wrap::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 54px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--hairline-strong), transparent);
+    }
+    .logo-wrap::before { right: calc(100% + 16px); }
+    .logo-wrap::after  { left:  calc(100% + 16px); }
+
+    .logo {
+      width: 68px;
+      height: 68px;
+      display: block;
+      filter: drop-shadow(0 4px 20px rgba(60, 201, 227, 0.25));
+    }
+
+    /* ── Eyebrow ── */
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeUp 0.7s cubic-bezier(.2,.7,.3,1) 0.05s forwards;
+    }
+
+    .eyebrow .tick { color: var(--paper-mute); letter-spacing: 0; }
 
     /* ── Headline ── */
     .headline {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
-      margin-bottom: 16px;
+      font-family: var(--display);
+      font-size: clamp(32px, 7.4vw, 44px);
+      font-weight: 600;
+      font-variation-settings: "opsz" 72, "SOFT" 30;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-bottom: 22px;
+      color: var(--paper);
       opacity: 0;
-      animation: fadeUp 0.6s ease 0.1s forwards;
+      animation: fadeUp 0.8s cubic-bezier(.2,.7,.3,1) 0.15s forwards;
     }
 
     .headline .accent {
+      display: block;
+      font-style: italic;
+      font-weight: 400;
       color: var(--cyan);
+      letter-spacing: -0.015em;
+      margin-top: 2px;
+      position: relative;
+    }
+
+    .headline .accent::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, var(--cyan-soft), transparent 70%);
+      filter: blur(14px);
+      z-index: -1;
+      opacity: 0.8;
     }
 
     .subline {
+      font-family: var(--sans);
       font-size: 15px;
       font-weight: 400;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 48px;
-      max-width: 340px;
+      color: var(--paper-dim);
+      line-height: 1.55;
+      letter-spacing: 0.005em;
+      margin-bottom: 44px;
+      max-width: 360px;
       opacity: 0;
-      animation: fadeUp 0.6s ease 0.2s forwards;
+      animation: fadeUp 0.8s cubic-bezier(.2,.7,.3,1) 0.28s forwards;
     }
 
     /* ── Form ── */
     .form-wrap {
       width: 100%;
       opacity: 0;
-      animation: fadeUp 0.6s ease 0.3s forwards;
+      animation: fadeUp 0.8s cubic-bezier(.2,.7,.3,1) 0.4s forwards;
     }
+
+    .field-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--paper-mute);
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+
+    .field-label .req { color: var(--cyan); }
 
     .email-input {
       width: 100%;
-      padding: 16px 20px;
-      font-family: var(--font);
+      padding: 18px 20px;
+      font-family: var(--sans);
       font-size: 15px;
       font-weight: 500;
-      color: var(--text-primary);
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
+      letter-spacing: -0.005em;
+      color: var(--paper);
+      background: rgba(236, 228, 209, 0.025);
+      border: 1px solid var(--hairline-strong);
       border-radius: var(--radius);
       outline: none;
-      transition: border-color 0.2s ease, background 0.2s ease;
+      transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
       margin-bottom: 12px;
+      caret-color: var(--cyan);
     }
 
     .email-input::placeholder {
-      color: var(--text-muted);
+      color: var(--paper-mute);
       font-weight: 400;
+      letter-spacing: 0;
     }
 
+    .email-input:hover { border-color: rgba(236, 228, 209, 0.28); }
+
     .email-input:focus {
-      border-color: var(--input-focus);
-      background: #0f0f0f;
+      border-color: var(--cyan);
+      background: rgba(60, 201, 227, 0.03);
+      box-shadow: 0 0 0 4px var(--cyan-soft), 0 0 24px -8px var(--cyan-strong);
     }
 
     .btn {
       width: 100%;
-      padding: 16px 20px;
-      font-family: var(--font);
-      font-size: 15px;
+      padding: 18px 20px;
+      font-family: var(--sans);
+      font-size: 14px;
       font-weight: 700;
-      color: #000;
-      background: var(--cyan);
-      border: none;
+      letter-spacing: 0.04em;
+      color: var(--ink-deep);
+      background: var(--paper);
+      border: 1px solid var(--paper);
       border-radius: var(--radius);
       cursor: pointer;
-      transition: opacity 0.2s ease, transform 0.1s ease;
-      letter-spacing: 0.2px;
+      transition: transform 0.1s ease, background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .btn:hover { opacity: 0.9; }
-    .btn:active { transform: scale(0.985); }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(60, 201, 227, 0.35), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn:hover {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: var(--ink-deep);
+      box-shadow: 0 8px 28px -8px var(--cyan-strong);
+    }
+
+    .btn:hover::after { left: 140%; }
+
+    .btn:active { transform: scale(0.988); }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+      background: var(--paper);
+      color: var(--ink-deep);
+      box-shadow: none;
+    }
+    .btn:disabled::after { display: none; }
 
     /* ── Messages ── */
     .msg {
-      font-size: 13px;
+      font-family: var(--mono);
+      font-size: 11.5px;
       font-weight: 500;
+      letter-spacing: 0.05em;
       margin-top: 12px;
+      padding-left: 14px;
+      position: relative;
       opacity: 0;
       max-height: 0;
       overflow: hidden;
       transition: opacity 0.3s ease, max-height 0.3s ease;
+      text-align: left;
     }
 
-    .msg.show {
-      opacity: 1;
-      max-height: 40px;
+    .msg::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      top: 0;
     }
 
-    .msg.error { color: #ff453a; }
-    .msg.dupe { color: var(--text-secondary); }
+    .msg.show { opacity: 1; max-height: 40px; }
+
+    .msg.error { color: var(--error); }
+    .msg.dupe { color: var(--paper-dim); }
 
     /* ── Success state ── */
     .success {
@@ -171,162 +356,251 @@
 
     .success.show {
       display: block;
-      animation: fadeUp 0.5s ease forwards;
+      animation: fadeUp 0.6s cubic-bezier(.2,.7,.3,1) forwards;
     }
 
     .success-icon {
-      width: 56px;
-      height: 56px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      background: var(--cyan-glow);
-      border: 2px solid var(--cyan);
+      background: var(--cyan-soft);
+      border: 1px solid var(--cyan);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px;
-      font-size: 24px;
+      margin: 0 auto 22px;
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 600;
       color: var(--cyan);
+      box-shadow: 0 0 0 6px rgba(60, 201, 227, 0.06), 0 0 32px -4px var(--cyan-strong);
     }
 
     .success h3 {
-      font-size: 22px;
-      font-weight: 800;
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 600;
+      font-variation-settings: "opsz" 72;
+      letter-spacing: -0.015em;
       margin-bottom: 8px;
+      color: var(--paper);
     }
 
     .success .sub {
       font-size: 14px;
-      color: var(--text-secondary);
+      color: var(--paper-dim);
       margin-bottom: 36px;
       line-height: 1.5;
     }
 
-    /* ── Referral card ── */
+    /* ── Referral card: archival frame ── */
     .referral-card {
       width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
+      background: linear-gradient(180deg, rgba(236, 228, 209, 0.025), rgba(236, 228, 209, 0.01));
+      border: 1px solid var(--hairline-strong);
       border-radius: var(--radius);
-      padding: 28px 24px;
+      padding: 32px 26px 28px;
       text-align: center;
+      position: relative;
+    }
+
+    /* Corner brackets */
+    .referral-card::before,
+    .referral-card::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--cyan);
+      pointer-events: none;
+    }
+    .referral-card::before {
+      top: -1px; left: -1px;
+      border-right: none; border-bottom: none;
+    }
+    .referral-card::after {
+      bottom: -1px; right: -1px;
+      border-left: none; border-top: none;
+    }
+
+    .corner-tr, .corner-bl {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--cyan);
+      pointer-events: none;
+    }
+    .corner-tr {
+      top: -1px; right: -1px;
+      border-left: none; border-bottom: none;
+    }
+    .corner-bl {
+      bottom: -1px; left: -1px;
+      border-right: none; border-top: none;
     }
 
     .referral-card h4 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-secondary);
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--paper-dim);
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 6px;
+      letter-spacing: 0.24em;
+      margin-bottom: 10px;
     }
 
     .referral-card .reward {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--cyan);
-      margin-bottom: 24px;
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 500;
+      font-style: italic;
+      font-variation-settings: "opsz" 72;
+      color: var(--paper);
+      margin-bottom: 26px;
+      letter-spacing: -0.01em;
     }
 
     .referral-link-row {
       display: flex;
       gap: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .referral-link-input {
       flex: 1;
+      min-width: 0;
       padding: 12px 14px;
-      font-family: var(--font);
-      font-size: 13px;
+      font-family: var(--mono);
+      font-size: 12px;
       font-weight: 500;
-      color: var(--text-primary);
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      border-radius: 10px;
+      letter-spacing: 0.01em;
+      color: var(--paper-dim);
+      background: var(--ink-deep);
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius);
       outline: none;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
     }
 
+    .referral-link-input:focus { border-color: var(--hairline-strong); color: var(--paper); }
+
     .copy-btn {
       padding: 12px 18px;
-      font-family: var(--font);
-      font-size: 13px;
+      font-family: var(--sans);
+      font-size: 12px;
       font-weight: 700;
-      color: #000;
-      background: var(--cyan);
-      border: none;
-      border-radius: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-deep);
+      background: var(--paper);
+      border: 1px solid var(--paper);
+      border-radius: var(--radius);
       cursor: pointer;
-      transition: opacity 0.2s ease;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
       white-space: nowrap;
     }
 
-    .copy-btn:hover { opacity: 0.9; }
+    .copy-btn:hover {
+      background: var(--cyan);
+      border-color: var(--cyan);
+    }
 
     .copy-btn.copied {
-      background: #2ecc71;
+      background: transparent;
+      border-color: var(--cyan);
+      color: var(--cyan);
     }
 
     /* ── Progress tracker ── */
     .progress-section {
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--surface-border);
+      margin-top: 26px;
+      padding-top: 26px;
+      border-top: 1px solid var(--hairline);
+      position: relative;
     }
 
     .progress-label {
-      font-size: 13px;
-      color: var(--text-secondary);
+      font-family: var(--mono);
+      font-size: 10.5px;
       font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--paper-mute);
       margin-bottom: 12px;
     }
 
     .progress-bar-track {
       width: 100%;
-      height: 8px;
-      background: var(--input-bg);
-      border-radius: 4px;
+      height: 3px;
+      background: rgba(236, 228, 209, 0.07);
+      border-radius: 999px;
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 14px;
+      position: relative;
     }
+
+    /* Tick markers at 33/66 */
+    .progress-bar-track::before,
+    .progress-bar-track::after {
+      content: "";
+      position: absolute;
+      top: -3px;
+      width: 1px;
+      height: 9px;
+      background: var(--hairline-strong);
+      z-index: 2;
+    }
+    .progress-bar-track::before { left: 33.333%; }
+    .progress-bar-track::after  { left: 66.666%; }
 
     .progress-bar-fill {
       height: 100%;
-      background: var(--cyan);
-      border-radius: 4px;
-      transition: width 0.6s ease;
+      background: linear-gradient(90deg, var(--cyan), #8EDCE9);
+      border-radius: 999px;
+      transition: width 0.8s cubic-bezier(.2,.7,.3,1);
       min-width: 0;
+      box-shadow: 0 0 12px var(--cyan-strong);
     }
 
     .progress-count {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--text-primary);
+      font-family: var(--display);
+      font-size: 34px;
+      font-weight: 600;
+      font-variation-settings: "opsz" 72;
+      letter-spacing: -0.02em;
+      color: var(--paper);
       margin-bottom: 4px;
+      line-height: 1;
     }
 
     .progress-count .of {
-      color: var(--text-muted);
-      font-weight: 600;
+      color: var(--paper-mute);
+      font-weight: 400;
+      font-style: italic;
     }
 
     .progress-hint {
-      font-size: 12px;
-      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 10.5px;
       font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--paper-mute);
     }
 
     .reward-unlocked {
       display: none;
-      margin-top: 16px;
+      margin-top: 18px;
       padding: 12px 16px;
-      background: var(--cyan-glow);
-      border: 1px solid rgba(29, 184, 212, 0.3);
-      border-radius: 10px;
+      background: var(--cyan-soft);
+      border: 1px solid rgba(60, 201, 227, 0.35);
+      border-radius: var(--radius);
+      font-family: var(--sans);
       font-size: 13px;
       font-weight: 600;
+      letter-spacing: 0.01em;
       color: var(--cyan);
     }
 
@@ -334,15 +608,32 @@
 
     /* ── Social proof counter ── */
     .counter {
-      margin-top: 32px;
-      font-size: 13px;
-      color: var(--text-muted);
+      margin-top: 36px;
+      font-family: var(--mono);
+      font-size: 11px;
       font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--paper-mute);
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.5s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .counter.show { opacity: 1; }
+
+    .counter::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
 
     /* ── Footer ── */
     .footer {
@@ -350,48 +641,101 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 20px;
-      text-align: center;
-      font-size: 12px;
+      padding: 18px 28px 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      z-index: 5;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--hairline);
+      background: linear-gradient(0deg, var(--ink-deep) 0%, transparent 100%);
     }
 
     .footer a {
-      color: var(--text-muted);
+      color: var(--paper-mute);
       text-decoration: none;
       transition: color 0.2s ease;
     }
 
-    .footer a:hover { color: var(--text-secondary); }
-    .footer .sep { color: var(--text-muted); margin: 0 8px; }
+    .footer a:hover { color: var(--paper); }
+    .footer .sep { color: var(--paper-faint); }
 
     /* ── Animations ── */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(0.82); }
     }
 
     /* ── Responsive ── */
-    @media (max-width: 480px) {
-      body { padding: 32px 20px 80px; }
-      .headline { font-size: 24px; }
-      .subline { font-size: 14px; margin-bottom: 40px; }
-      .logo { width: 60px; height: 60px; margin-bottom: 40px; }
+    @media (max-width: 520px) {
+      body { padding: 80px 20px 76px; }
+      .topbar { padding: 16px 18px 14px; font-size: 9.5px; letter-spacing: 0.1em; }
+      .topbar .label-r .hide-sm { display: none; }
+      .footer { padding: 14px 18px 18px; gap: 10px; font-size: 9.5px; letter-spacing: 0.1em; }
+      .logo-wrap { margin-bottom: 36px; }
+      .logo-wrap::before, .logo-wrap::after { width: 32px; }
+      .logo { width: 60px; height: 60px; }
+      .headline { font-size: 32px; }
+      .subline { font-size: 14px; margin-bottom: 36px; }
+      .referral-card { padding: 28px 20px 24px; }
+      .progress-count { font-size: 30px; }
+    }
+
+    @media (max-width: 380px) {
+      .topbar .label-l .hide-xs { display: none; }
     }
   </style>
 </head>
 <body>
+
+  <div class="atmosphere"></div>
+  <div class="grain"></div>
+
+  <!-- Top system bar -->
+  <div class="topbar">
+    <span class="label-l"><span class="pulse"></span>MVA<span class="hide-xs"> · memory index</span></span>
+    <span class="label-r">access: <em>pending</em></span>
+  </div>
+
   <div class="container">
 
     <!-- Logo -->
-    <img src="logo.png" alt="MemoryVaultAI" class="logo">
+    <div class="logo-wrap">
+      <img src="logo.png" alt="MemoryVaultAI" class="logo">
+    </div>
+
+    <!-- Eyebrow -->
+    <div class="eyebrow">
+      <span class="tick">[ 01 ]</span>
+      <span>early access · waitlist</span>
+    </div>
 
     <!-- Headline -->
-    <h1 class="headline">Find any saved video.<br><span class="accent">Instantly.</span></h1>
+    <h1 class="headline">Find any saved video.<span class="accent">Instantly.</span></h1>
     <p class="subline">The first AI search engine for your saved social media. Just describe what you remember.</p>
 
     <!-- Email form -->
     <div class="form-wrap" id="formWrap">
-      <input type="email" class="email-input" id="emailInput" placeholder="Email" autocomplete="email" required>
+      <div class="field-label">
+        <span>your email</span>
+        <span class="req">required</span>
+      </div>
+      <input type="email" class="email-input" id="emailInput" placeholder="you@domain.com" autocomplete="email" required>
       <button class="btn" id="submitBtn" onclick="handleSubmit()">Join the Waitlist</button>
       <div class="msg error" id="errorMsg"></div>
       <div class="msg dupe" id="dupeMsg"></div>
@@ -405,6 +749,9 @@
 
       <!-- Referral card -->
       <div class="referral-card">
+        <span class="corner-tr"></span>
+        <span class="corner-bl"></span>
+
         <h4>Share &amp; Earn</h4>
         <p class="reward">Refer 3 friends → free Pro month</p>
 
@@ -414,6 +761,7 @@
         </div>
 
         <div class="progress-section">
+          <div class="progress-label">Referral progress</div>
           <div class="progress-bar-track">
             <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
           </div>
