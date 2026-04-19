@@ -46,10 +46,12 @@
       align-items: center;
       padding: 96px 24px 0;
       position: relative;
-      overflow-x: hidden;
+      overflow: hidden;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+
+    body.submitted { overflow-x: hidden; overflow-y: auto; }
 
     .container { margin: auto 0; }
 
@@ -916,6 +918,7 @@
 
       // Hide form
       formWrap.style.display = 'none';
+      document.body.classList.add('submitted');
 
       // Set referral link
       const link = `https://memoryvaultai.app?ref=${referralCode}`;
