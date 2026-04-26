@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,14..144,400;0,14..144,600;0,14..144,700;1,14..144,400;1,14..144,500&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -272,6 +273,13 @@
       border-color: var(--cyan);
       background: rgba(60, 201, 227, 0.03);
       box-shadow: 0 0 0 4px var(--cyan-soft), 0 0 24px -8px var(--cyan-strong);
+    }
+
+    .turnstile-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 4px 0 14px;
+      min-height: 65px;
     }
 
     .btn {
@@ -731,6 +739,9 @@
         <span class="req">required</span>
       </div>
       <input type="email" class="email-input" id="emailInput" placeholder="you@domain.com" autocomplete="email" required>
+      <div class="turnstile-wrap">
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAADDnXted2l4YUKUA" data-theme="dark"></div>
+      </div>
       <button class="btn" id="submitBtn" onclick="handleSubmit()">Join the Waitlist</button>
       <div class="msg error" id="errorMsg"></div>
       <div class="msg dupe" id="dupeMsg"></div>
@@ -786,18 +797,17 @@
     // CONFIG
     // ═══════════════════════════════════════════════════
     const SB = 'https://qwiyntxzbfyhwkvjkeun.supabase.co';
+    const SIGNUP_ENDPOINT = `${SB}/functions/v1/verify-and-signup`;
     const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aXludHh6YmZ5aHdrdmprZXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExOTAzMTQsImV4cCI6MjA4Njc2NjMxNH0.igvD66azZWnU2AaWTlQ0_VOt_w73bVHQWj2RCrYdrDY';
-    const INSERT_HEADERS = {
-      'apikey': KEY,
-      'Authorization': `Bearer ${KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    };
     const RPC_HEADERS = {
       'apikey': KEY,
       'Authorization': `Bearer ${KEY}`,
       'Content-Type': 'application/json'
     };
+
+    function resetTurnstile() {
+      try { if (typeof turnstile !== 'undefined') turnstile.reset(); } catch (_) {}
+    }
 
     // ═══════════════════════════════════════════════════
     // Read URL params
@@ -825,9 +835,17 @@
       errorMsg.classList.remove('show');
       dupeMsg.classList.remove('show');
 
-      // Validate
+      // Validate email
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errorMsg.textContent = 'Please enter a valid email address.';
+        errorMsg.classList.add('show');
+        return;
+      }
+
+      // Read Turnstile token
+      const turnstileToken = (typeof turnstile !== 'undefined') ? turnstile.getResponse() : '';
+      if (!turnstileToken) {
+        errorMsg.textContent = 'Please complete the verification.';
         errorMsg.classList.add('show');
         return;
       }
@@ -836,72 +854,59 @@
       btn.disabled = true;
       btn.textContent = 'Joining...';
 
+      const fail = (text, reset) => {
+        errorMsg.textContent = text;
+        errorMsg.classList.add('show');
+        if (reset) resetTurnstile();
+        btn.disabled = false;
+        btn.textContent = 'Join the Waitlist';
+      };
+
       try {
         const refCode = getRefCode();
 
-        // Build insert payload
         const payload = {
           email: email,
+          turnstileToken: turnstileToken,
           source: getSource()
         };
-
-        // If there's a ref param, set referred_by
         if (refCode) {
           payload.referred_by = refCode;
         }
 
-        const res = await fetch(`${SB}/rest/v1/waitlist`, {
+        const res = await fetch(SIGNUP_ENDPOINT, {
           method: 'POST',
-          headers: INSERT_HEADERS,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
-        if (res.ok) {
-          await showExistingUser(email);
-        } else if (res.status === 409) {
-          dupeMsg.textContent = "You're already on the list!";
-          dupeMsg.classList.add('show');
-          await showExistingUser(email);
-        } else {
-          const errBody = await res.json().catch(() => null);
-          if (errBody && errBody.code === '23505') {
-            dupeMsg.textContent = "You're already on the list!";
-            dupeMsg.classList.add('show');
-            await showExistingUser(email);
-          } else {
-            errorMsg.textContent = 'Something went wrong. Try again.';
-            errorMsg.classList.add('show');
-            btn.disabled = false;
-            btn.textContent = 'Join the Waitlist';
-          }
-        }
-      } catch (err) {
-        console.error(err);
-        errorMsg.textContent = 'Connection error. Try again.';
-        errorMsg.classList.add('show');
-        btn.disabled = false;
-        btn.textContent = 'Join the Waitlist';
-      }
-    }
+        const data = await res.json().catch(() => ({}));
 
-    // ═══════════════════════════════════════════════════
-    // Handle existing user (duplicate email)
-    // ═══════════════════════════════════════════════════
-    async function showExistingUser(email) {
-      try {
-        const res = await fetch(`${SB}/rest/v1/rpc/get_referral_stats`, {
-          method: 'POST',
-          headers: RPC_HEADERS,
-          body: JSON.stringify({ lookup_email: email })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.length > 0) {
-            showSuccess(data[0].referral_code, data[0].referral_count);
+        if (res.ok && data && data.ok && data.referral_code) {
+          if (data.alreadyExists) {
+            dupeMsg.textContent = "Already on the list — here's your link.";
+            dupeMsg.classList.add('show');
           }
+          resetTurnstile();
+          showSuccess(data.referral_code, data.referral_count || 0);
+          return;
         }
-      } catch (err) {
-        console.error('Failed to fetch existing user:', err);
+
+        const err = (data && data.error) || '';
+
+        if (res.status === 400 && err === 'Invalid email format') {
+          fail('Please enter a valid email address.', false);
+        } else if (res.status === 400 && err === 'Disposable emails not allowed') {
+          fail('Please use a permanent email address.', false);
+        } else if ((res.status === 400 && err === 'Verification required') ||
+                   (res.status === 403 && err === 'Verification failed')) {
+          fail('Verification failed. Please refresh the page and try again.', true);
+        } else {
+          fail('Something went wrong. Please try again.', true);
+        }
+      } catch (e) {
+        console.error(e);
+        fail('Something went wrong. Please try again.', true);
       }
     }
 
