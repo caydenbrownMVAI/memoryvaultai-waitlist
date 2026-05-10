@@ -111,6 +111,7 @@
       text-transform: uppercase;
       color: var(--paper-dim);
       text-decoration: none;
+      border: none;
       transition: color 0.2s ease, gap 0.2s ease;
     }
 
@@ -173,6 +174,15 @@
       font-weight: 400;
     }
 
+    h3 {
+      font-family: var(--sans);
+      font-size: 15.5px;
+      font-weight: 600;
+      margin-top: 24px;
+      margin-bottom: 10px;
+      color: var(--paper);
+    }
+
     p {
       color: var(--paper-dim);
       margin-bottom: 16px;
@@ -205,6 +215,8 @@
       color: var(--cyan);
       font-size: 0.9em;
     }
+
+    strong { color: var(--paper); }
 
     a {
       color: var(--cyan);
@@ -251,6 +263,7 @@
       .footer { padding: 14px 18px 18px; gap: 10px; font-size: 9.5px; letter-spacing: 0.1em; }
       h1 { font-size: 36px; }
       h2 { font-size: 20px; margin-top: 36px; }
+      h3 { font-size: 15px; }
       .date { margin-bottom: 36px; padding-bottom: 22px; }
       p, ul li { font-size: 15px; }
     }
@@ -266,28 +279,173 @@
   </div>
 
   <div class="container">
-    <a href="/" class="back">← Back to waitlist</a>
+    <a href="/" class="back">← Back to MemoryVaultAI</a>
     <div class="doc-eyebrow">[ 02 ] · legal</div>
     <h1>Privacy Policy</h1>
-    <p class="date">Last updated: March 2026</p>
+    <p class="date">Last updated: May 10, 2026 · Effective: May 10, 2026</p>
 
-    <h2>What We Collect</h2>
-    <p>When you join our waitlist, we collect your email address and the referral source (how you found us). That's it.</p>
+    <p>MemoryVaultAI ("we," "us," "our") is a registered business name with ASIC, operating as a partnership in Queensland, Australia. Although MemoryVaultAI may currently fall below the $3 million annual turnover threshold for the Privacy Act 1988 (Cth), we voluntarily comply with the Australian Privacy Principles. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use the MemoryVaultAI mobile application and related services (the "Service").</p>
 
-    <h2>How We Use It</h2>
-    <p>Your email is used solely to notify you when MemoryVaultAI launches and to send occasional updates about the app. We will never sell, share, or rent your email to third parties.</p>
+    <p>We are committed to transparency and plain language. If anything in this policy is unclear, contact us at <a href="mailto:support@memoryvaultai.app">support@memoryvaultai.app</a>.</p>
 
-    <h2>When the App Launches</h2>
-    <p>A full privacy policy covering how MemoryVaultAI handles your data will be published before launch.</p>
+    <h2>1. Information We Collect</h2>
 
-    <h2>Data Storage</h2>
-    <p>Your data is stored securely with encryption at rest and in transit.</p>
+    <h3>Account Information</h3>
+    <ul>
+      <li><strong>Email address</strong> — provided during sign-up via Apple Sign-In, Google Sign-In, or email/password registration.</li>
+      <li><strong>Name</strong> — provided by Apple Sign-In (first sign-in only) or Google Sign-In. Optional and not required to use the Service.</li>
+    </ul>
 
-    <h2>Your Rights</h2>
-    <p>You can request deletion of your data at any time by emailing <a href="mailto:support@memoryvaultai.app">support@memoryvaultai.app</a>.</p>
+    <h3>Content You Share</h3>
+    <ul>
+      <li><strong>Video URLs</strong> — links you voluntarily share to the app from third-party platforms (e.g., Instagram, TikTok, YouTube).</li>
+      <li><strong>AI-generated metadata</strong> — derived from those videos by our AI processing: title, summary, transcript, creator name, people mentioned, locations mentioned, and semantic embeddings used for search.</li>
+    </ul>
 
-    <h2>Contact</h2>
-    <p>Questions? Reach us at <a href="mailto:support@memoryvaultai.app">support@memoryvaultai.app</a>.</p>
+    <h3>Usage Data</h3>
+    <ul>
+      <li>Monthly video save count</li>
+      <li>Current subscription tier (Free or Pro)</li>
+      <li>Account creation date and last active timestamp</li>
+      <li>Marketing email opt-in status</li>
+    </ul>
+
+    <h3>Device Data</h3>
+    <ul>
+      <li>IP address, device type, and OS version — collected automatically via our authentication provider (Supabase) as part of session metadata.</li>
+    </ul>
+
+    <h3>Payment Data</h3>
+    <p>We do <strong>not</strong> collect payment card numbers, billing addresses, or other financial details directly. Payments are handled entirely by Apple App Store or Google Play. We receive only your RevenueCat customer ID and subscription status.</p>
+
+    <h2>2. Information We Do Not Collect</h2>
+    <ul>
+      <li>Browsing history outside the app</li>
+      <li>Contacts, photos, or precise location</li>
+      <li>Microphone or camera access (the app does not use these)</li>
+      <li>Cookies or web tracking pixels (the app is mobile native)</li>
+    </ul>
+
+    <h2>3. How We Use Your Information</h2>
+    <ul>
+      <li><strong>Provide the Service</strong> — process your video URLs with AI to generate searchable metadata.</li>
+      <li><strong>Manage your account</strong> — authenticate you, maintain your session, manage your subscription tier.</li>
+      <li><strong>Communicate with you</strong> — send transactional emails (password resets, account confirmations) and, with your consent, marketing updates about new features.</li>
+      <li><strong>Improve the Service</strong> — understand usage patterns to prioritise features and fix issues.</li>
+      <li><strong>Ensure security</strong> — detect and prevent unauthorised access or abuse.</li>
+      <li><strong>Comply with legal obligations</strong> — maintain records required for tax and financial reporting.</li>
+    </ul>
+
+    <h2>4. Legal Basis for Processing (GDPR)</h2>
+    <p>If you are located in the European Economic Area (EEA) or United Kingdom, we process your personal data under the following legal bases:</p>
+    <ul>
+      <li><strong>Consent</strong> — account creation, marketing emails. You may withdraw consent at any time.</li>
+      <li><strong>Performance of a contract</strong> — processing videos and generating metadata to deliver the Service you signed up for.</li>
+      <li><strong>Legitimate interests</strong> — usage analytics, security monitoring, and service improvement, balanced against your rights.</li>
+      <li><strong>Legal obligation</strong> — tax and financial records related to subscription billing.</li>
+    </ul>
+
+    <h2>5. Apple Sign-In Data</h2>
+    <p>If you sign in with Apple, we receive your name (on first sign-in only) and either your real email address or an Apple Private Relay email address, depending on your choice during sign-in.</p>
+    <ul>
+      <li>We do not display your Private Relay email address publicly or to other users.</li>
+      <li>We do not share your Apple-provided email with third parties for marketing.</li>
+      <li>We use it solely for account identification and transactional communication.</li>
+      <li>You can revoke MemoryVaultAI's access at any time via your Apple ID settings (Settings → Apple Account → Sign-In & Security → Sign in with Apple).</li>
+      <li>If you revoke access, you will no longer be able to sign in via Apple. You may contact us to arrange alternative account access or deletion.</li>
+    </ul>
+
+    <h2>6. AI-Generated Metadata</h2>
+    <p>We use Google Gemini to analyse videos you share and generate metadata including transcripts, summaries, and tags. This metadata is produced by AI and may contain inaccuracies.</p>
+    <ul>
+      <li>AI-generated metadata is provided as-is and we do not guarantee its accuracy.</li>
+      <li>You have the right to request human review of any AI-generated output if you believe it is inaccurate or incomplete.</li>
+      <li>You may contest AI-generated metadata by contacting us at <a href="mailto:support@memoryvaultai.app">support@memoryvaultai.app</a>.</li>
+      <li>We commit to reviewing such requests and responding within 14 days.</li>
+    </ul>
+
+    <h2>7. Third Parties We Share Data With</h2>
+    <p>We share data only with service providers necessary to operate the Service. We do <strong>not</strong> sell or share your personal information for advertising purposes.</p>
+    <ul>
+      <li><strong>Supabase</strong> — database, authentication, and file storage (hosted in Sydney, Australia).</li>
+      <li><strong>Google Cloud Run</strong> — video processing infrastructure (Sydney region).</li>
+      <li><strong>Google Gemini API</strong> — AI analysis of video content to generate metadata.</li>
+      <li><strong>Apple / Google</strong> — sign-in providers and payment processors.</li>
+      <li><strong>RevenueCat</strong> — subscription management and entitlement tracking.</li>
+      <li><strong>Resend</strong> — transactional and marketing email delivery.</li>
+    </ul>
+    <p>All processors are bound by their own data protection agreements. We use them to operate the Service, not to share your data for their independent marketing purposes.</p>
+
+    <h2>8. International Data Transfers</h2>
+    <p>Our primary infrastructure is hosted in Sydney, Australia. However, some processors (Google Gemini API, RevenueCat, Resend) may process data in the United States or other jurisdictions.</p>
+    <p>Where data is transferred outside Australia or the EEA, we rely on:</p>
+    <ul>
+      <li>Standard Contractual Clauses (SCCs) approved by the European Commission.</li>
+      <li>Processor certifications under the EU-U.S. Data Privacy Framework where applicable.</li>
+      <li>Contractual protections requiring equivalent data protection standards.</li>
+    </ul>
+
+    <h2>9. Data Retention</h2>
+    <ul>
+      <li><strong>Free tier</strong> — video metadata is archived (not visible to you) after 30 days from save. Fully deleted after 90 days.</li>
+      <li><strong>Pro tier</strong> — video metadata kept indefinitely while your subscription remains active.</li>
+      <li><strong>Account deletion</strong> — all user data deleted within 30 days of your deletion request.</li>
+      <li><strong>Backups</strong> — data may persist in encrypted backups for up to 90 days after deletion, after which it is permanently purged.</li>
+      <li><strong>Legal obligations</strong> — we may retain minimal records (subscription transaction IDs, dates) as required by tax law.</li>
+    </ul>
+
+    <h2>10. Your Rights</h2>
+    <p>Depending on your location, you have some or all of the following rights regarding your personal information:</p>
+    <ul>
+      <li><strong>Access</strong> — request a copy of the personal data we hold about you.</li>
+      <li><strong>Rectification</strong> — request correction of inaccurate or incomplete data.</li>
+      <li><strong>Erasure</strong> — request deletion of your data (supported via the in-app delete account function or by contacting us).</li>
+      <li><strong>Restriction of processing</strong> — request that we limit how we use your data while a concern is being resolved.</li>
+      <li><strong>Data portability</strong> — request your data in a structured, machine-readable format. We provide export on request.</li>
+      <li><strong>Objection</strong> — object to processing based on legitimate interests, including for direct marketing.</li>
+      <li><strong>Withdraw consent</strong> — where processing is based on consent, withdraw it at any time without affecting the lawfulness of prior processing.</li>
+      <li><strong>Not be subject to automated decision-making</strong> — request human review of decisions made solely by automated processing that significantly affect you. Our AI generates metadata to assist you but does not make decisions with legal or similarly significant effects on you. If you believe AI outputs are inaccurate, see Section 6 above.</li>
+    </ul>
+    <p>To exercise any of these rights, email <a href="mailto:support@memoryvaultai.app">support@memoryvaultai.app</a>. We will respond within 30 days (or sooner where required by law).</p>
+
+    <h3>California Residents (CCPA/CPRA)</h3>
+    <p>If you are a California resident, you have the right to know what personal information we collect, request its deletion, and opt out of its sale. We do not sell or share personal information for cross-context behavioural advertising. You will not be discriminated against for exercising your rights. If we use sensitive personal information in ways beyond what's necessary to provide the Service, you have the right to limit such use.</p>
+
+    <h3>Australian Residents</h3>
+    <p>If you are an Australian resident, you may lodge a complaint with the Office of the Australian Information Commissioner (OAIC) at <a href="https://www.oaic.gov.au">www.oaic.gov.au</a> if you believe we have breached the Australian Privacy Principles.</p>
+
+    <h3>EU/UK Residents</h3>
+    <p>If you are in the EU or UK, you may lodge a complaint with your local supervisory authority if you believe your data protection rights have been violated.</p>
+
+    <h2>11. Children's Privacy</h2>
+    <p>MemoryVaultAI is rated 13+ and is not directed at children under 13. We do not knowingly collect personal information from users under 13. If we discover that an account belongs to a user under 13, we will delete it and all associated data promptly. If you believe a child under 13 has created an account, please contact us immediately.</p>
+
+    <h2>12. Marketing Communications</h2>
+    <p>By signing up to the waitlist or creating an account, you consent to receive transactional emails (account confirmations, password resets) and updates about MemoryVaultAI. You may opt out of marketing emails at any time via the unsubscribe link in any marketing email or by emailing <a href="mailto:support@memoryvaultai.app">support@memoryvaultai.app</a>.</p>
+    <p>Every marketing email includes a one-click unsubscribe link. Transactional emails (password resets, security alerts) are not affected by your marketing preferences.</p>
+    <p>If you unsubscribe, we permanently suppress your email address from future marketing campaigns. Records of your unsubscribe request are kept for compliance purposes.</p>
+
+    <h2>13. Security</h2>
+    <p>We implement appropriate technical and organisational measures to protect your data, including:</p>
+    <ul>
+      <li>Encryption in transit (TLS) and at rest.</li>
+      <li>Authentication via secure token-based sessions stored in device secure storage.</li>
+      <li>Access controls limiting employee access to personal data.</li>
+      <li>Our infrastructure providers (Supabase, Google Cloud) maintain industry-standard security certifications. We rely on their compliance frameworks for the underlying infrastructure.</li>
+    </ul>
+    <p>No system is perfectly secure. If we become aware of a data breach that poses a risk to your rights, we will notify you and relevant authorities (the Office of the Australian Information Commissioner, and where applicable, EU/UK supervisory authorities) within 72 hours of becoming aware of the breach, in accordance with applicable law.</p>
+
+    <h2>14. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. If we make material changes, we will notify you via email or in-app notification at least 30 days before the changes take effect. Continued use of the Service after the effective date constitutes acceptance of the updated policy. We encourage you to review this page periodically.</p>
+
+    <h2>15. Contact Us</h2>
+    <p>If you have questions about this Privacy Policy or wish to exercise your rights:</p>
+    <p>
+      MemoryVaultAI<br>
+      ABN: 86 841 520 767<br>
+      Queensland, Australia<br>
+      <a href="mailto:support@memoryvaultai.app">support@memoryvaultai.app</a>
+    </p>
   </div>
 
   <div class="footer">
