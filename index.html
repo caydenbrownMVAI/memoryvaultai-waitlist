@@ -358,6 +358,27 @@
     .msg.error { color: var(--error); }
     .msg.dupe { color: var(--paper-dim); }
 
+    .consent-line {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--paper-mute);
+      line-height: 1.55;
+      letter-spacing: 0.01em;
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .consent-line a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(60, 201, 227, 0.3);
+      white-space: nowrap;
+      transition: border-color 0.2s ease;
+    }
+
+    .consent-line a:hover { border-color: var(--cyan); }
+
     /* ── Success state ── */
     .success {
       display: none;
@@ -743,6 +764,7 @@
         <div class="cf-turnstile" data-sitekey="0x4AAAAAADDnXted2l4YUKUA" data-theme="dark"></div>
       </div>
       <button class="btn" id="submitBtn" onclick="handleSubmit()">Join the Waitlist</button>
+      <p class="consent-line">By joining the waitlist, you agree to our <a href="/terms">Terms</a> and acknowledge our <a href="/privacy">Privacy Policy</a>.</p>
       <div class="msg error" id="errorMsg"></div>
       <div class="msg dupe" id="dupeMsg"></div>
     </div>
